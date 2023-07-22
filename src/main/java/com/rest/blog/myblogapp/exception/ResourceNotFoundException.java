@@ -1,4 +1,4 @@
-package com.rest.blog.myblogapp.entity;
+package com.rest.blog.myblogapp.exception;
 
 import lombok.Builder;
 import lombok.Getter;
