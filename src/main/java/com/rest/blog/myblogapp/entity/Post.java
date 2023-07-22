@@ -1,6 +1,7 @@
 package com.rest.blog.myblogapp.entity;
 
 import com.rest.blog.myblogapp.entity.superentity.BasicDateEntity;
+import com.rest.blog.myblogapp.payload.PostDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +16,6 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BasicDateEntity {
-
 
     @Id
     @Column(name = "post_id")
@@ -36,6 +36,17 @@ public class Post extends BasicDateEntity {
         this.title = title;
         this.description = description;
         this.content = content;
+    }
+
+    public PostDto toDto() {
+        return PostDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .description(this.description)
+                .content(this.content)
+                .createdDate(super.createdDate)
+                .updatedDate(super.updatedDate)
+                .build();
     }
 
 }

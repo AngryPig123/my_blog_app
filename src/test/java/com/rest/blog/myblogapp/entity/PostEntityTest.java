@@ -1,7 +1,9 @@
 package com.rest.blog.myblogapp.entity;
 
 import com.rest.blog.myblogapp.entity.repository.Repository;
+import com.rest.blog.myblogapp.payload.PostDto;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +40,20 @@ class PostEntityTest extends Repository {
     void testToString() {
         Optional<Post> findPost = postRepository.findById(post.getId());
         log.info(getFormat(BLUE, "post toString = {}"), findPost.orElseThrow());
+    }
+
+    @Test
+    void post_entity_dto_test() {
+        Post findPost = postRepository.findById(post.getId()).orElseThrow();
+        PostDto findPostDto = findPost.toDto();
+
+        Assertions.assertInstanceOf(PostDto.class, findPostDto);
+        Assertions.assertEquals(findPost.getId(), findPostDto.getId());
+        Assertions.assertEquals(findPost.getTitle(), findPostDto.getTitle());
+        Assertions.assertEquals(findPost.getContent(), findPostDto.getContent());
+        Assertions.assertEquals(findPost.getDescription(), findPostDto.getDescription());
+        Assertions.assertEquals(findPost.getCreatedDate(), findPostDto.getCreatedDate());
+        Assertions.assertEquals(findPost.getUpdatedDate(), findPostDto.getUpdatedDate());
     }
 
 }
