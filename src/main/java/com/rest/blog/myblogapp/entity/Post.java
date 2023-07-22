@@ -7,24 +7,28 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "post")
+@Table(
+        name = "post",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}    //  title 에 유니크 제약 조건 추가.
+)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BasicDateEntity {
+
 
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Builder
@@ -33,6 +37,5 @@ public class Post extends BasicDateEntity {
         this.description = description;
         this.content = content;
     }
-
 
 }
