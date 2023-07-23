@@ -11,10 +11,10 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private String resourceName;
     private String fieldName;
-    private String fieldValue;
+    private Long fieldValue;
 
     @Builder
-    public ResourceNotFoundException(String resourceName, String fieldName, String fieldValue) {
+    public ResourceNotFoundException(String resourceName, String fieldName, Long fieldValue) {
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));   //  Exception massage 를 설정해 주는 부분.
         this.resourceName = resourceName;
         this.fieldName = fieldName;
