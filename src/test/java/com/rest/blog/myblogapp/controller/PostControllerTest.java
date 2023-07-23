@@ -9,8 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +21,12 @@ class PostControllerTest extends ControllerTestBase {
 
     private static PostDto postDto;
     private static String parameter;
+
+    private static PostDto updatePostDto;
+    private static String updateParameter;
+
+    private static PostDto updateFailPostDto;
+    private static String updateFailParameter;
 
     @Autowired
     private PostService postService;
@@ -35,6 +40,21 @@ class PostControllerTest extends ControllerTestBase {
                 .content("테스트 콘텐츠")
                 .build();
         parameter = objectMapper.writeValueAsString(postDto);
+
+        updatePostDto = PostDto.builder()
+                .title("수정된 타이틀")
+                .description("수정된 디스크립션")
+                .content("수정된 콘텐츠")
+                .build();
+        updateParameter = objectMapper.writeValueAsString(updatePostDto);
+
+        updateFailPostDto = PostDto.builder()
+                .title("실패 검증 타이틀")
+                .description("실패 검증  디스크립션")
+                .content("실패 검증  콘텐츠")
+                .build();
+        updateFailParameter = objectMapper.writeValueAsString(updateFailPostDto);
+
     }
 
     @Test
@@ -70,6 +90,7 @@ class PostControllerTest extends ControllerTestBase {
     }
 
     @Test
+    @Order(4)
     void 게시물_상세_조회_실패_테스트() throws Exception {
         mockMvc.perform(
                         get("/api/post/{id}", (Long.MAX_VALUE - 1))
@@ -78,6 +99,37 @@ class PostControllerTest extends ControllerTestBase {
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.timeStamp").exists())
                 .andExpect(jsonPath("$.details").exists())
+                .andDo(print());
+    }
+
+    @Test
+    @Order(5)
+    void 게시물_수정_성공_테스트() throws Exception {
+        mockMvc.perform(
+                        put("/api/post/{id}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .content(updateParameter)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(updatePostDto.getTitle()))
+                .andExpect(jsonPath("$.description").value(updatePostDto.getDescription()))
+                .andExpect(jsonPath("$.content").value(updatePostDto.getContent()))
+                .andDo(print());
+    }
+
+    @Test
+    @Order(6)
+    void 게시물_수정_실패_테스트() throws Exception {
+        mockMvc.perform(
+                        put("/api/post/{id}", (Long.MAX_VALUE - 1))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .content(updateFailParameter)
+                )
+                .andExpect(status().is4xxClientError())
                 .andDo(print());
     }
 

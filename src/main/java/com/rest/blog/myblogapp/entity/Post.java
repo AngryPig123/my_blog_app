@@ -38,6 +38,14 @@ public class Post extends BasicDateEntity {
         this.content = content;
     }
 
+    public Post updatePost(PostDto postDto) {
+        return Post.builder()
+                .title(postDto.getTitle())
+                .description(postDto.getDescription())
+                .content(postDto.getContent())
+                .build();
+    }
+
     public PostDto toDto() {
         return PostDto.builder()
                 .id(this.id)
