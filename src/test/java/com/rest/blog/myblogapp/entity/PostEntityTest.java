@@ -54,6 +54,7 @@ class PostEntityTest extends Repository {
         Assertions.assertEquals(findPost.getDescription(), findPostDto.getDescription());
         Assertions.assertEquals(findPost.getCreatedDate(), findPostDto.getCreatedDate());
         Assertions.assertEquals(findPost.getUpdatedDate(), findPostDto.getUpdatedDate());
+        
     }
 
 }

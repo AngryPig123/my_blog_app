@@ -1,11 +1,13 @@
 package com.rest.blog.myblogapp.payload;
 
+import com.rest.blog.myblogapp.entity.Post;
 import com.rest.blog.myblogapp.payload.superdto.BasicDateDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class PostDto extends BasicDateDto {
@@ -23,6 +25,14 @@ public class PostDto extends BasicDateDto {
         this.content = content;
         super.createdDate = createdDate;
         super.updatedDate = updatedDate;
+    }
+
+    public Post toEntity() {
+        return Post.builder()
+                .title(this.title)
+                .content(this.content)
+                .description(this.description)
+                .build();
     }
 
 }
